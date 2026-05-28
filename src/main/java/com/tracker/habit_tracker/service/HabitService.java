@@ -1,84 +1,73 @@
 package com.tracker.habit_tracker.service;
 
-import com.tracker.habit_tracker.dto.HabitRequest;
-import com.tracker.habit_tracker.dto.HabitResponse;
+import com.tracker.habit_tracker.dto.habitDTO.HabitRequest;
+import com.tracker.habit_tracker.dto.habitDTO.HabitResponse;
 import com.tracker.habit_tracker.entity.Habit;
 import com.tracker.habit_tracker.exception.HabitNotFoundException;
 import com.tracker.habit_tracker.mapper.HabitMapper;
+import com.tracker.habit_tracker.repository.HabitRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class HabitService {
 
-    private Long nextId = 1L;
-
-    private final HashMap<Long, Habit> habits = new HashMap<>();
-
     private final HabitMapper habitMapper;
+    private final HabitRepository habitRepository;
 
-    public HabitService(HabitMapper habitMapper) {
+    public HabitService(HabitMapper habitMapper, HabitRepository habitRepository) {
         this.habitMapper = habitMapper;
+        this.habitRepository = habitRepository;
     }
 
     public HabitResponse create(HabitRequest request) {
-
         Habit habit = habitMapper.toEntity(request);
-
-        habit.setId(nextId);
         habit.setCreatedAt(LocalDateTime.now());
-
-        habits.put(nextId, habit);
-
-        nextId++;
-
-        return habitMapper.toResponse(habit);
+        Habit savedHabit = habitRepository.save(habit);
+        return habitMapper.toResponse(savedHabit);
     }
 
     public List<HabitResponse> getAll() {
 
-        List<HabitResponse> responses = new ArrayList<>();
-
-        for (Habit habit : habits.values()) {
-            responses.add(habitMapper.toResponse(habit));
-        }
-        return responses;
+        return habitRepository.findAll()
+                .stream()
+                .map(habitMapper::toResponse)
+                .toList();
     }
 
     public HabitResponse getById(Long id) {
-        Habit habit = habits.get(id);
-        if (habit == null) {
-            throw new HabitNotFoundException();
-        }
+        Habit habit = habitRepository.findById(id)
+                .orElseThrow(() ->
+                        new HabitNotFoundException()
+                );
+
         return habitMapper.toResponse(habit);
     }
 
     public HabitResponse update(Long id, HabitRequest habitRequest)
     {
-        Habit updateHabit = habits.get(id);
+        Habit habit = habitRepository.findById(id)
+                .orElseThrow(() ->
+                        new HabitNotFoundException()
+                );
 
-        if (updateHabit == null) {
-            throw new HabitNotFoundException();
-        }
-        updateHabit.setName(habitRequest.getName());
-        updateHabit.setDescription(habitRequest.getDescription());
-        updateHabit.setTarget(habitRequest.getTarget());
+        habit.setName(habitRequest.getName());
+        habit.setDescription(habitRequest.getDescription());
+        habit.setTargetDays(habitRequest.getTarget());
 
-        habits.put(id, updateHabit);
+        Habit updatedHabit = habitRepository.save(habit);
 
-        return habitMapper.toResponse(updateHabit);
+        return habitMapper.toResponse(updatedHabit);
 
         }
 
     public void delete(Long id) {
-        if (!habits.containsKey(id)) {
+        if (!habitRepository.existsById(id)) {
             throw new HabitNotFoundException();
         }
-        habits.remove(id);
+        habitRepository.deleteById(id);
     }
 }
 

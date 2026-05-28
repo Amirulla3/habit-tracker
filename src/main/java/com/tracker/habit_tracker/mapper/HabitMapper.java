@@ -1,7 +1,7 @@
 package com.tracker.habit_tracker.mapper;
 
-import com.tracker.habit_tracker.dto.HabitRequest;
-import com.tracker.habit_tracker.dto.HabitResponse;
+import com.tracker.habit_tracker.dto.habitDTO.HabitRequest;
+import com.tracker.habit_tracker.dto.habitDTO.HabitResponse;
 import com.tracker.habit_tracker.entity.Habit;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ public class HabitMapper {
 
         habit.setName(request.getName());
         habit.setDescription(request.getDescription());
-        habit.setTarget(request.getTarget());
+        habit.setTargetDays(request.getTarget());
 
         return habit;
     }
@@ -25,7 +25,7 @@ public class HabitMapper {
         response.setId(habit.getId());
         response.setName(habit.getName());
         response.setDescription(habit.getDescription());
-        response.setTarget(habit.getTarget());
+        response.setTarget(habit.getTargetDays());
         response.setCreatedAt(habit.getCreatedAt());
 
         return response;

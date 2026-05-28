@@ -1,4 +1,4 @@
-package com.tracker.habit_tracker.dto;
+package com.tracker.habit_tracker.dto.habitDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;

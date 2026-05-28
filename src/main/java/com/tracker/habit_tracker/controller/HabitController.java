@@ -1,15 +1,13 @@
 package com.tracker.habit_tracker.controller;
 
-import com.tracker.habit_tracker.dto.HabitRequest;
-import com.tracker.habit_tracker.dto.HabitResponse;
-import com.tracker.habit_tracker.dto.RecordResponse;
+import com.tracker.habit_tracker.dto.habitDTO.HabitRequest;
+import com.tracker.habit_tracker.dto.habitDTO.HabitResponse;
 import com.tracker.habit_tracker.service.HabitService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

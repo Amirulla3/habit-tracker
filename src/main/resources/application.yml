@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/my_postgres
+    username: postgres
+    password: admin
+
+  jpa:
+      hibernate:
+          ddl-auto: validate # НЕ update — схему создаёт Liquibase
+      show-sql: true
+
+  liquibase:
+      change-log: classpath:db/changelog/db.changelog-master.yaml

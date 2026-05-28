@@ -1,0 +1,15 @@
+package com.tracker.habit_tracker.dto.weeklyStatsDTO;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class WeeklyStatsResponse {
+    List<WeekHabitResponse> week;
+}
